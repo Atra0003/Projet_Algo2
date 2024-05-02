@@ -17,8 +17,8 @@ public class Main {
             System.out.println("Tout les lights s'allume");
         }
         else {
-            // met ton code ici
-            System.out.println("Tout les lights ne s'allume pas");
+            ProblemeNbrMaxAmpoulesAllumees objet_test = new ProblemeNbrMaxAmpoulesAllumees(main.bulds);
+            System.out.println(objet_test.determiner_nbr_max_ampoules_allumees(0));
         }
     }
 
