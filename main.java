@@ -5,27 +5,31 @@ import java.util.Scanner;
 
 public class main {
     private static Graph G; // Déclarez G comme un champ de classe statique
-    private static ArrayList<String> buld;
     private static AllLightUp allLightUp;
+    private static ArrayList<ArrayList<Integer>> bulds = new ArrayList<ArrayList<Integer>>();
     
     public static void main(String[] args) {
         try {
             File myObj = new File(args[0]);
             Scanner myReader = new Scanner(myObj);
-            buld = new ArrayList<>();
             int size = 0;
             while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                buld.add(data);
-                String[] arrOfStr = data.split(" ");
-                if (Integer.valueOf(arrOfStr[0]) > size) { 
-                    size = Integer.valueOf(arrOfStr[0]); // number of line and column
+                String buld = myReader.nextLine();
+                ArrayList<Integer> dataOfBuld = new ArrayList<>();
+                String[] arrOfStr = buld.split(" ");
+                for (int i = 0; i < arrOfStr.length; i++) {
+                    dataOfBuld.add(Integer.valueOf(arrOfStr[i]));
                 }
+                
+                if(dataOfBuld.get(0) > 0) {
+                    size = dataOfBuld.get(0); 
+                }
+                bulds.add(dataOfBuld);
             }
             myReader.close();
             
             G = new Graph(size);
-            for (String data : buld) {
+            for (ArrayList<Integer> data : bulds) {
                 G.addLink(data);
             }
 

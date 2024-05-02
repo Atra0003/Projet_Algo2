@@ -55,49 +55,44 @@ public class Graph {
         return this.tGraph;
     }
     
-    public void addLink(String data) {
-        //System.out.println(data);
-        String l, c, x, y, z, t;
-        String[] arrOfStr = data.split(" ");
-        l = arrOfStr[0];
-        c = arrOfStr[1];
-        x = arrOfStr[2];
-        y = arrOfStr[3];
-        z = arrOfStr[4];
-        t = arrOfStr[5];
-        // identifier les noueds
-        switche_L_on = getSwitch(switches, Integer.valueOf(l) - 1, "on");
-        switche_L_off = getSwitch(switches, Integer.valueOf(l) - 1, "off");
-        switche_C_on = getSwitch(switches, size + Integer.valueOf(c) - 1, "on");
-        switche_C_off = getSwitch(switches, size + Integer.valueOf(c) - 1, "off");
+    public void addLink(ArrayList<Integer> data) {
+        int l = data.get(0);
+        int c = data.get(1);
+        int x = data.get(2);
+        int y = data.get(3);
+        int z = data.get(4);
+        int t = data.get(5);
+        
+        switche_L_on = getSwitch(switches, l - 1, "on");
+        switche_L_off = getSwitch(switches, l - 1, "off");
+        switche_C_on = getSwitch(switches, size + c - 1, "on");
+        switche_C_off = getSwitch(switches, size + c - 1, "off");
 
-        tGraph_L_on = getSwitch(tGraph, Integer.valueOf(l) - 1, "on");
-        tGraph_L_off = getSwitch(tGraph, Integer.valueOf(l) - 1, "off");
-        tGraph_C_on = getSwitch(tGraph, size + Integer.valueOf(c) - 1, "on");
-        tGraph_C_off = getSwitch(tGraph, size + Integer.valueOf(c) - 1, "off");
+        tGraph_L_on = getSwitch(tGraph, l - 1, "on");
+        tGraph_L_off = getSwitch(tGraph, l - 1, "off");
+        tGraph_C_on = getSwitch(tGraph, size + c - 1, "on");
+        tGraph_C_off = getSwitch(tGraph, size + c - 1, "off");
 
         // mettre les liens
-        if(x.equals("0")) {
+        if(x == 0) {
             switche_L_on.addEdge(switche_C_off);
             switche_C_on.addEdge(switche_L_off);
             tGraph_C_off.addEdge(tGraph_L_on);
             tGraph_L_off.addEdge(tGraph_C_on);
         }
-        if(y.equals("0")) {
+        if(y == 0) {
         	switche_L_on.addEdge(switche_C_on);
         	switche_C_off.addEdge(switche_L_off);
             tGraph_C_on.addEdge(tGraph_L_on);
             tGraph_L_off.addEdge(tGraph_C_off);
         }
-        if(z.equals("0")) {
+        if(z == 0) {
         	switche_L_off.addEdge(switche_C_off);
         	switche_C_on.addEdge(switche_L_on);
-
             tGraph_C_off.addEdge(tGraph_L_off);
             tGraph_L_on.addEdge(tGraph_C_on);
-            
         }
-        if(t.equals("0")) {
+        if(t == 0) {
             switche_L_off.addEdge(switche_C_on);
             switche_C_off.addEdge(switche_L_on);
             tGraph_C_on.addEdge(tGraph_L_off); 
