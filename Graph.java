@@ -1,37 +1,37 @@
 import java.util.ArrayList;
 
 public class Graph {
-    private Switches[][] switches; // Déclarez switches en tant que champ de classe
-    private Switches[][] tGraph; 
+    private Switche[][] switches; // Déclarez switches en tant que champ de classe
+    private Switche[][] tGraph; 
     int size;
-    Switches switche_L_on;
-    Switches switche_L_off;
-    Switches switche_C_on;
-    Switches switche_C_off;
+    Switche switche_L_on;
+    Switche switche_L_off;
+    Switche switche_C_on;
+    Switche switche_C_off;
 
-    Switches tGraph_L_on;
-    Switches tGraph_L_off;
-    Switches tGraph_C_on;
-    Switches tGraph_C_off;
+    Switche tGraph_L_on;
+    Switche tGraph_L_off;
+    Switche tGraph_C_on;
+    Switche tGraph_C_off;
 
     public Graph(int size) {
-        switches = new Switches[2 * size][]; // Initialisez le tableau de switches dans le constructeur
-        tGraph = new Switches[2 * size][];
+        switches = new Switche[2 * size][]; // Initialisez le tableau de switches dans le constructeur
+        tGraph = new Switche[2 * size][];
         for (int i = 0; i < 2 * size; i++) {
             
-            switches[i] = new Switches[2]; // Initialisez chaque élément comme un tableau de 2 éléments
-            tGraph[i] = new Switches[2];
+            switches[i] = new Switche[2]; // Initialisez chaque élément comme un tableau de 2 éléments
+            tGraph[i] = new Switche[2];
 
-            switches[i][0] = new Switches(i, "on");
-            switches[i][1] = new Switches(i, "off");
+            switches[i][0] = new Switche(i, "on");
+            switches[i][1] = new Switche(i, "off");
 
-            tGraph[i][0] = new Switches(i, "on");
-            tGraph[i][1] = new Switches(i, "off");
+            tGraph[i][0] = new Switche(i, "on");
+            tGraph[i][1] = new Switche(i, "off");
         }
         this.size = size;
     }
 
-    public Switches getSwitch(Switches[][] g, int i, String state) {
+    public Switche getSwitch(Switche[][] g, int i, String state) {
 	    //System.out.println("i = " + i);
         if (i >= 0 && i < g.length && g[i] != null) {
             if(state.equals("on")) {
@@ -47,11 +47,11 @@ public class Graph {
         return null;
     }
 
-    public Switches[][] getAllSwitche() {
+    public Switche[][] getAllSwitche() {
         return this.switches;
     }
 
-    public Switches[][] getTGraph() {
+    public Switche[][] getTGraph() {
         return this.tGraph;
     }
     
@@ -108,11 +108,11 @@ public class Graph {
         }
     }
 
-    public void seeNeighbors(Switches[][] g) {
+    public void seeNeighbors(Switche[][] g) {
         for(int i = 0; i < g.length; i++){
             for(int j = 0; j < g[i].length; j++){
                 System.out.print(g[i][j].getId() + ": ");
-                ArrayList<Switches> neighbors = g[i][j].getNeighbors();
+                ArrayList<Switche> neighbors = g[i][j].getNeighbors();
                 for(int k = 0; k < neighbors.size(); k++){
                     System.out.print(neighbors.get(k).getId() + " ");
                 }
@@ -121,4 +121,3 @@ public class Graph {
         }
     }
 } 
-

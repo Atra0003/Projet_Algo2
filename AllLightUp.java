@@ -3,7 +3,7 @@ import java.util.Collections;
 
 public class AllLightUp {
     Graph graph;
-    Switches[][] tGraph;
+    Switche[][] tGraph;
     boolean answerAllLightUp;
     ArrayList<String> listDFS = new ArrayList<String>();
     ArrayList<String> listSCC = new ArrayList<String>();
@@ -40,13 +40,13 @@ public class AllLightUp {
     }
 
 
-    public void strongComponentConnexe(Switches node, boolean answerAllLightUp) {
+    public void strongComponentConnexe(Switche node, boolean answerAllLightUp) {
         if (node.getFixed()) {
             return;
         }
         node.setFixed();
         listSCC.add(node.getOpposite());
-        for (Switches s : node.getNeighbors()) {
+        for (Switche s : node.getNeighbors()) {
             if(listSCC.contains(s.getId()) && s.getFixed() == false) {
                 this.answerAllLightUp = false;
                 strongComponentConnexe(s, answerAllLightUp);
@@ -57,12 +57,12 @@ public class AllLightUp {
         }
     }
 
-    public void dfs(Switches node) {
+    public void dfs(Switche node) {
         if (node.getFixed()) {
             return;
         }
         node.setFixed(); // Fixer le commutateur
-        for (Switches s : node.getNeighbors()) {
+        for (Switche s : node.getNeighbors()) {
             dfs(s);
         }
         listDFS.add(node.getId());

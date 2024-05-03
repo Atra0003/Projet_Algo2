@@ -3,22 +3,24 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner; 
 
-public class Main {
+public class LightingProblem {
     private Graph G;
     private AllLightUp allLightUp;
-    private ArrayList<ArrayList<Integer>> bulds = new ArrayList<ArrayList<Integer>>();
+    private ArrayList<ArrayList<Integer>> bulbs = new ArrayList<ArrayList<Integer>>();
     int size = 0;
     
     public static void main(String[] args) {
-        Main main = new Main();
-        main.processFile(args);
-        main.processGraph();
-        if(main.processAllLightUp()) {
-            System.out.println("Tout les lights s'allume");
+        LightingProblem lightingproblem = new LightingProblem();
+        lightingproblem.processFile(args);
+        lightingproblem.processGraph();
+        if(lightingproblem.processAllLightUp()) {
+            System.out.println("Toutes les Ampoules s'allument ? : OUI");
         }
         else {
-            ProblemeNbrMaxAmpoulesAllumees objet_test = new ProblemeNbrMaxAmpoulesAllumees(main.bulds);
-            System.out.println(objet_test.determiner_nbr_max_ampoules_allumees(0));
+            System.out.println("Toutes les Ampoules s'allument ? : NON");
+            System.out.print("Le nombre maximum d'Ampoules qui s'allument est : ");
+            MaxNbrLightBulbsLit bulbs_nbr_lit = new MaxNbrLightBulbsLit(lightingproblem.bulbs);
+            System.out.println(bulbs_nbr_lit.determiner_nbr_max_ampoules_allumees(0));
         }
     }
 
@@ -31,7 +33,7 @@ public class Main {
 
     private void processGraph() {
         G = new Graph(size);
-        for (ArrayList<Integer> data : bulds) {
+        for (ArrayList<Integer> data : bulbs) {
             G.addLink(data);
         }
     }
@@ -56,7 +58,7 @@ public class Main {
                 if(dataOfBuld.get(0) > 0) {
                     size = dataOfBuld.get(0); 
                 }
-                bulds.add(dataOfBuld);
+                bulbs.add(dataOfBuld);
             }
             myReader.close();
         } catch (FileNotFoundException e) {

@@ -1,12 +1,12 @@
 import java.util.ArrayList;
 
-public class Switches {
+public class Switche {
     int Num;
     String state;
     boolean fixed;
-    ArrayList<Switches> neighbors;
+    ArrayList<Switche> neighbors;
 
-    Switches(int num, String state) {
+    Switche(int num, String state) {
         this.Num = num;
         this.state = state;
         this.fixed = false;
@@ -38,7 +38,7 @@ public class Switches {
         return this.fixed;
     }
     
-    public ArrayList<Switches> getNeighbors() {
+    public ArrayList<Switche> getNeighbors() {
         return this.neighbors;
     }
     
@@ -46,12 +46,11 @@ public class Switches {
         this.fixed = true;
     }
 
-    public void addEdge(Switches N) {
-        neighbors.add(N);
+    public void addEdge(Switche N) {
+        neighbors.add(N); 
     }
 
     public void clear() {
         neighbors.clear();
     }
 }
-
