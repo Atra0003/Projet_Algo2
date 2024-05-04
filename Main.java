@@ -3,14 +3,14 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner; 
 
-public class LightingProblem {
+public class Main {
     private Graph G;
     private AllLightUp allLightUp;
     private ArrayList<ArrayList<Integer>> bulbs = new ArrayList<ArrayList<Integer>>();
     int size = 0;
     
     public static void main(String[] args) {
-        LightingProblem lightingproblem = new LightingProblem();
+        Main lightingproblem = new Main();
         lightingproblem.processFile(args);
         lightingproblem.processGraph();
         if(lightingproblem.processAllLightUp()) {

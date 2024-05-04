@@ -4,6 +4,6 @@ javac *.java
 
 Et pour executer notre programme une fois commpiler, il vous suffit de taper 
 
-LightingProblem filename.txt
+Main filename.txt
 
 
