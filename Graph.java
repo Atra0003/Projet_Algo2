@@ -1,9 +1,10 @@
 import java.util.ArrayList;
 
 public class Graph {
-    private Switche[][] switches; // Déclarez switches en tant que champ de classe
-    private Switche[][] tGraph; 
-    int size;
+    private Switche[][] switches; // Tableau 2D pour les interrupteurs
+    private Switche[][] tGraph; // Tableau 2D pour le graphe transpose
+    int size; // Taille du graphe
+
     Switche switche_L_on;
     Switche switche_L_off;
     Switche switche_C_on;
@@ -14,9 +15,11 @@ public class Graph {
     Switche tGraph_C_on;
     Switche tGraph_C_off;
 
+    boolean contradiction = false; // Indique s'il y a une contradiction dans le graphe
+
     public Graph(int size) {
-        switches = new Switche[2 * size][]; // Initialisez le tableau de switches dans le constructeur
-        tGraph = new Switche[2 * size][];
+        switches = new Switche[2 * size][]; // Initialisation du tableau pour les interrupteurs
+        tGraph = new Switche[2 * size][]; // Initialisation du tableau pour le graphe transpose
         for (int i = 0; i < 2 * size; i++) {
             
             switches[i] = new Switche[2]; // Initialisez chaque élément comme un tableau de 2 éléments
@@ -28,9 +31,10 @@ public class Graph {
             tGraph[i][0] = new Switche(i, "on");
             tGraph[i][1] = new Switche(i, "off");
         }
-        this.size = size;
+        this.size = size; // Attribution de la taille du graphe
     }
 
+    // Méthode pour récupérer un interrupteur dans le graphe
     public Switche getSwitch(Switche[][] g, int i, String state) {
 	    //System.out.println("i = " + i);
         if (i >= 0 && i < g.length && g[i] != null) {
@@ -47,14 +51,17 @@ public class Graph {
         return null;
     }
 
+    // Méthode pour récupérer tous les interrupteurs du graphe
     public Switche[][] getAllSwitche() {
         return this.switches;
     }
 
+    // Méthode pour récupérer tous les interrupteurs du graphe
     public Switche[][] getTGraph() {
         return this.tGraph;
     }
     
+    // Méthode pour ajouter des liens entre les interrupteurs en fonction des conditions de satisfaction de l'ampoule
     public void addLink(ArrayList<Integer> data) {
         int l = data.get(0);
         int c = data.get(1);
@@ -98,8 +105,54 @@ public class Graph {
             tGraph_C_on.addEdge(tGraph_L_off); 
             tGraph_L_on.addEdge(tGraph_C_off);
         }
+        if(x+y+z+t == 1) {
+            boolean checkLine = false;
+            boolean checkColumn = false;
+            if(x == 1) {
+                if(switche_L_on.getfixed() == false) {switche_L_on.setFixed();}
+                else{checkLine = checkContradiction(switche_L_on, switche_L_off);}
+
+                if(switche_C_on.getfixed() == false) {switche_C_on.setFixed();}
+                else{checkColumn=checkContradiction(switche_C_on, switche_C_off);}
+            }
+            if(y == 1) {
+                if(switche_L_on.getfixed() == false) {switche_L_on.setFixed();}
+                else{checkLine= checkContradiction(switche_L_on, switche_L_off);}
+
+                if(switche_C_off.getfixed() == false) {switche_C_off.setFixed();}
+                else{checkColumn=checkContradiction(switche_C_off, switche_C_on);}
+            }
+            if(z == 1) {
+                if(switche_L_off.getfixed() == false) {switche_L_off.setFixed();}
+                else{checkLine=checkContradiction(switche_L_off, switche_L_on);}
+
+                if(switche_C_on.getfixed() == false) {switche_C_on.setFixed();}
+                else{checkColumn=checkContradiction(switche_C_on, switche_C_off);}
+            }
+            if(t == 1) {
+                if(switche_L_off.getfixed() == false) {switche_L_off.setFixed();}
+                else{checkLine=checkContradiction(switche_L_off, switche_L_on);}
+
+                if(switche_C_off.getfixed() == false) {switche_C_off.setFixed();}
+                else{checkColumn=checkContradiction(switche_C_off, switche_C_on);}
+            }
+            if(checkLine == true || checkColumn == true) {
+                setContradiction();
+            }
+        }
     }
 
+    // Méthode pour définir la contradiction dans le graphe
+    public void setContradiction() {
+        contradiction=true;
+    }
+
+    // Méthode pour obtenir l'état de la contradiction dans le graphe
+    public boolean getContradiction() {
+        return contradiction;
+    }
+
+    // Méthode pour effacer les liens des interrupteurs dans le graphe
     public void clear() {
         for (int i = 0; i < switches.length; i++) {
             for (int j = 0; j < switches[i].length; j++) {
@@ -108,6 +161,15 @@ public class Graph {
         }
     }
 
+    // Méthode pour vérifier s'il y a une contradiction entre deux interrupteurs
+    public boolean checkContradiction(Switche L, Switche C) {
+        if(L.getfixed() ==  true && C.getfixed() == true) {
+            return true;
+        }
+        return false;
+    }
+
+    // Méthode pour afficher les voisins de chaque interrupteur dans le graphe
     public void seeNeighbors(Switche[][] g) {
         for(int i = 0; i < g.length; i++){
             for(int j = 0; j < g[i].length; j++){
