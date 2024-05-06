@@ -4,6 +4,6 @@ javac *.java
 
 Et pour executer notre programme une fois commpiler, il vous suffit de taper 
 
-Main filename.txt
+java Main filename.txt
 
 
