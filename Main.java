@@ -1,90 +1,149 @@
-import java.io.File;  
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner; 
+import java.util.*;
 
+// Classe principale Main qui contient le point d'entrée du programme (méthode main).
 public class Main {
-    private Graph G;
-    private AllLightUp allLightUp;
-    private ArrayList<ArrayList<Integer>> bulbs = new ArrayList<ArrayList<Integer>>();
-    int size = 0;
-    
     public static void main(String[] args) {
-        // Création d'une instance de la classe Main
-        Main lightingProblem = new Main();
-        
-        // Traitement du fichier d'entrée
-        lightingProblem.processFile(args);
-        
-        // Construction du graphe
-        lightingProblem.processGraph();
-    
-        System.out.println("aaa = " + lightingProblem.G.getContradiction());
-        
-        // Vérification de l'existence d'une contradiction dans le graphe
-        if (lightingProblem.G.getContradiction()) {
-            // Si aucune contradiction n'est détectée, on vérifie si toutes les ampoules peuvent être allumées
-            if (lightingProblem.processAllLightUp()) {
-                System.out.println("Toutes les Ampoules s'allument ? : OUI");
-            } else {
-                // Si toutes les ampoules ne peuvent pas être allumées, on détermine le nombre maximum d'ampoules qui peuvent être allumées
-                System.out.println("Toutes les Ampoules s'allument ? : NON");
-                System.out.print("Le nombre maximum d'Ampoules qui s'allument est : ");
-                MaxNbrLightBulbsLit bulbsNbrLit = new MaxNbrLightBulbsLit(lightingProblem.bulbs);
-                System.out.println(bulbsNbrLit.determiner_nbr_max_ampoules_allumees(0));
+        // Création d'un objet LectureFichier pour lire et analyser un fichier de texte.
+        LectureFichier lectureFichier = new LectureFichier();
+        // Définition du chemin du fichier à lire.
+        String cheminFichier = "texte.txt";
+        // Appel de la méthode lireFichier pour lire le contenu du fichier spécifié et construire un graphe.
+        lectureFichier.lireFichier(cheminFichier);
+
+        // Création d'un objet NodeUtils qui fournit des utilitaires pour travailler avec des listes de Node.
+        NodeUtils nodeUtils = new NodeUtils();
+
+        //NodeUtils1 nodeUtils1 = new NodeUtils1(lectureFichier.rightImpList);
+
+        /*-----------------------------La conclusion------------------------------------------ */
+        // Vérification si toutes les composantes fortement connexes du graphe peuvent être validées sans contradictions.
+        if(lectureFichier.directedGraph.findStronglyConnectedComponents()){
+            // Affichage positif si toutes les "ampoules" (nodes) peuvent être allumées selon les conditions du graphe.
+            System.out.println("Oui toutes les ampoules peuvent être allumées");
+        }else {
+            // Affichage négatif si il existe des contradictions qui empêchent certaines "ampoules" d'être allumées.
+            System.out.println("Non toutes les ampoules ne peuvent être allumées");
+            System.out.println();
+            // Construction de la plus grande liste de Node qui ne contient pas de contradictions.
+            List<Node> largestNonContradictingList = nodeUtils.buildLargestNonContradictingList(lectureFichier.rightImpList);
+            // Affichage de la taille de cette liste, divisée par 2, probablement pour obtenir le nombre de paires ou de groupes.
+            System.out.println("Taille de la plus grande liste sans contradictions : " + largestNonContradictingList.size() / 2);
+            System.out.println();
+            // Affichage de chaque Node dans la liste sans contradictions.
+            for (Node node : largestNonContradictingList) {
+                System.out.println(node);
             }
-        } else {
-            // Si une contradiction est détectée dans le graphe, aucune ampoule ne peut être allumée
-            System.out.println("Toutes les Ampoules s'allument ? : NON");
-            System.out.print("Le nombre maximum d'Ampoules qui s'allument est : ");
-            MaxNbrLightBulbsLit bulbsNbrLit = new MaxNbrLightBulbsLit(lightingProblem.bulbs);
-            System.out.println(bulbsNbrLit.determiner_nbr_max_ampoules_allumees(0));
-        }
-    }
-    
+        } 
 
-    
-    
-    private boolean processAllLightUp() {
-        // Initialisation de l'intence pour déterminer si tout les lights s'allume.
-        allLightUp = new AllLightUp(G); 
-        boolean answerAllLightUp = allLightUp.returnAllLightUp();
-       return answerAllLightUp;
-    }
-
-    private void processGraph() {
-        G = new Graph(size); // Initialisation du Graph
-        for (ArrayList<Integer> data : bulbs) {
-            G.addLink(data);
-        }
-    }
-
-    private void processFile(String[] args) {
-        try {
-            File file = new File(args[0]);
-            if(!file.exists()) { // Vérifie que le fichier existe
-                System.out.println("Le fichier n'existe pas.");
-                return;
+        System.out.println();
+        
+        /*-----------------------------La liste des implications directent--------------------- */
+        System.out.println("La liste des bonne implications : ");
+        for(List<Node> l : lectureFichier.rightImpList){
+            for(Node n : l){
+                System.out.print(n.toString());
             }
-
-            Scanner myReader = new Scanner(file);
-            while (myReader.hasNextLine()) {
-                String buld = myReader.nextLine();
-                ArrayList<Integer> dataOfBuld = new ArrayList<>();
-                String[] arrOfStr = buld.split(" ");
-                for (int i = 0; i < arrOfStr.length; i++) {
-                    dataOfBuld.add(Integer.valueOf(arrOfStr[i]));
-                }
-                
-                if(dataOfBuld.get(0) > 0) {
-                    size = dataOfBuld.get(0); // Déterminer la taille de la matrice
-                }
-                bulbs.add(dataOfBuld);
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) { // Erreur lors de la lecture du fichier
-            System.out.println("Erreur lors de la lecture du fichier.");
-            e.printStackTrace();
+            System.out.println();
         }
-    }
+
+        /*--------------------------------------------------------------------------------------- 
+        List<List<Node>> listeee = nodeUtils1.listAmpoule();
+        System.out.println();
+        System.out.print("La taille de la liste est : ");
+        System.out.println(listeee.size());
+        System.out.println();
+        System.out.println("La liste des implications pour max ampoules : ");
+        for(List<Node> lis : listeee){
+            for(Node n : lis){
+                System.out.print(n.toString());
+            }
+            System.out.println();
+        }*/
+       
+    } 
 }
+
+
+
+/*-----------------------Impression du graphe------------------------------------------------ 
+System.out.println("Le graphe est : ");
+for (Map.Entry<Node, List<Node>> entry : lectureFichier.directedGraph.adjacencyList.entrySet()) {
+    System.out.print("Ligne : " + entry.getKey().toString() + " Connecté à : ");
+    for (Node n : entry.getValue()) {
+        System.out.print(n.toString() + " ");
+    }
+    System.out.println();
+} 
+System.err.println();
+
+/*----------------------Impression du graphe inverse---------------------------------------- 
+System.out.println("Le graphe Inverse est : ");
+lectureFichier.directedGraph.creatGraphReverse();
+for (Map.Entry<Node, List<Node>> entry : lectureFichier.directedGraph.reverseAdjacencyList.entrySet()) {
+    System.out.print("Ligne : " + entry.getKey().toString() + " Connecté à : ");
+    for (Node n : entry.getValue()) {
+        System.out.print(n.toString() + " ");
+    }
+    System.out.println();
+} 
+System.err.println();
+
+/*----------------------Le dfs post-ordre---------------------------------------------------- 
+    // Start DFS from the first entry if exists
+
+System.out.println("Le parcours en dfs post_ordre inverse du graphe : ");
+lectureFichier.directedGraph.findStronglyConnectedComponents();
+
+System.out.println();
+
+/*---------------------Les composantes fortement connexes----------------------------- 
+System.out.print("La taille est : ");
+System.out.println(lectureFichier.directedGraph.stronglyConnectedComponents.size());
+int count = 1;
+for (Set<Node> component : lectureFichier.directedGraph.stronglyConnectedComponents) {
+    System.out.print("Les composantes numero : ");
+    System.out.println(count);
+    for (Node node : component) {
+        System.out.print(node.toString() + " ");
+    }
+    count ++;
+    System.out.println(); // Pour ajouter une ligne vide entre chaque composante
+} */
+/*-----------------------------La liste des implications directent--------------------- 
+System.out.println("La liste des bonne implications : ");
+for(List<Node> l : lectureFichier.rightImpList){
+    for(Node n : l){
+        System.out.print(n.toString());
+    }
+    System.out.println();
+}
+System.out.println();
+/*-----------------------------La taille maximal---------------------------------------- */
+/*
+System.err.println();
+System.err.println("La taille maximal est : ");
+Map<String, Boolean> lis = nodeUtils.buildOptimalSet(lectureFichier.rightImpList);
+System.out.println(nodeUtils.number(lectureFichier.rightImpList, lis));
+
+
+for (Map.Entry<String, Boolean> entry : lis.entrySet()) {
+    String key = entry.getKey();
+    Boolean value = entry.getValue();
+    System.out.println("Key: " + key + ", Value: " + value);
+} 
+System.out.println();
+
+System.out.println("Le ampoules impliquées sont : ");
+for(List<Node> entry : nodeUtils.goodImList){
+    for(Node n : entry){
+        System.out.print(n.toString());
+    }
+    System.out.println();
+} 
+
+Partie2---------------------------------------------------------------------------------------------
+List<Node> largestSet = nodeUtils.buildLargestNonContradictingSet(lectureFichier.rightImpList);
+System.out.println("Largest non-contradicting set of nodes:");
+for (Node node : largestSet) {
+    System.out.println(node.row + " is " + (node.isOpen ? "open" : "closed"));
+}*/
